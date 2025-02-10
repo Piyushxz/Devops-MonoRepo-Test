@@ -1,15 +1,19 @@
 name: Deploy to staging
+
 on:
   push:
     branches:
-      - "main"
-  
+      - main
+
 jobs:
   redeploy_everything:
     name: Deploying everything to staging
     runs-on: ubuntu-latest  # Required for GitHub Actions to execute
 
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
       - name: SSH into server
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
