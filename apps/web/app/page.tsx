@@ -1,21 +1,15 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
-import {dbClient} from "@repo/db/client"
-
+import { dbClient } from "@repo/db/client";
 
 export default async function Home() {
-  const user = await dbClient.user.findFirst()
+  const user = await dbClient.user.findFirst();
   return (
     <div className={""}>
-      <h5>Development test </h5>
-      {
-        user?.username
-      }
-      {
-          user?.password
-
-      }
+      <h5 style={{ color: "black" }}>Development test</h5>
+      {user?.username}
+      {user?.password}
     </div>
   );
 }
