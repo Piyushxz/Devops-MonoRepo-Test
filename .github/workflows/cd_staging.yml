@@ -24,7 +24,7 @@ jobs:
       - name: SSH into server and deploy
         run: |
           ssh -t -i ~/ssh_key ubuntu@13.60.253.180 << 'EOF'
-            cd Devops-MonoRepo-Test/ && git pull
+            cd Devops-MonoRepo-Test && git pull
             pnpm install
             pnpm run build
             pm2 restart 3
