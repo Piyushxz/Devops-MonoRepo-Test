@@ -18,12 +18,12 @@ jobs:
 
       - name: SSH into server and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@13.60.253.180 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.60.253.180 << 'EOF'
             cd Devops-MonoRepo-Test/
             pwd
             ls -la
             git pull origin main
-            export PATH=/root/.nvm/versions/node/v22.13.1/bin:$PATH
+            export PATH=/home/ubuntu/.nvm/versions/node/v22.13.1/bin:$PATH
             npm install -g pnpm
             pnpm install
             pnpm run build
