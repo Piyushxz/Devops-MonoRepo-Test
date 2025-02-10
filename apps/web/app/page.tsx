@@ -10,6 +10,8 @@ export default async function Home() {
       <h5 style={{ color: "black" }}>Development test</h5>
       {user?.username}
       {user?.password}
+
+      <div style={{color:"pink"}}>Hey test</div>
     </div>
   );
 }
