@@ -1,6 +1,5 @@
-
-  
 name: Deploy to staging
+
 on:
   push:
     branches: [ main ]
@@ -10,11 +9,23 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploying everything to the staging cluster
     steps:
-      - run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
-          mkdir -p /home/runner/.ssh
-          ls /home/runner/.ssh
-          touch /home/runner/.ssh/known_hosts
-          echo "${{ secrets.KNOWN_HOSTS }}" &> /home/runner/.ssh/known_hosts
-          chmod 700 /home/runner/ssh_key
-          ssh -i ~/ssh_key root@13.60.253.180 -t "cd Devops-MonoRepo-Test/ && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart fe-sever && pm2 restart http-sever && pm2 restart ws-sever"
+      - name: Set up SSH key and known hosts
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 13.60.253.180 >> ~/.ssh/known_hosts
+
+      - name: SSH into server and deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@13.60.253.180 << 'EOF'
+            cd Devops-MonoRepo-Test/
+            pwd
+            ls -la
+            git pull origin main
+            export PATH=/root/.nvm/versions/node/v22.13.1/bin:$PATH
+            npm install -g pnpm
+            pnpm install
+            pnpm run build
+            pm2 restart all
+          EOF
