@@ -8,6 +8,7 @@ export default async function Home() {
   const user = await dbClient.user.findFirst()
   return (
     <div className={""}>
+      <h5>Development test </h5>
       {
         user?.username
       }
