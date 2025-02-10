@@ -11,7 +11,7 @@ export default async function Home() {
       {user?.username}
       {user?.password}
 
-      <div style={{color:"pink"}}>Hey test</div>
+      <h5 style={{color:"pink"}}>Hey test</h5>
     </div>
   );
 }
