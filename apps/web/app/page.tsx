@@ -14,6 +14,8 @@ export default async function Home() {
       <p style={{ color: "blue" }}>This is a test deployment change.</p>
 
       <button>Click Me</button>
+      <button>Click Me</button>
+
     </div>
   );
 }
