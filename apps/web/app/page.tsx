@@ -1,6 +1,4 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+
 import { dbClient } from "@repo/db/client";
 
 export default async function Home() {
@@ -11,7 +9,11 @@ export default async function Home() {
       {user?.username}
       {user?.password}
 
-      <h5 style={{color:"pink"}}>Hey test</h5>
+      <h5 style={{ color: "pink" }}>Hey test</h5>
+
+      <p style={{ color: "blue" }}>This is a test deployment change.</p>
+
+      <button>Click Me</button>
     </div>
   );
 }
