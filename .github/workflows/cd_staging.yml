@@ -1,37 +1,35 @@
----
-  name: Deploy to staging
-  on:
-    push:
-      branches:
-        - main
-  jobs:
-    redeploy_everything:
-      runs-on: ubuntu-latest
-      name: Deploying everything to the staging cluster
-      steps:
-        - name: Set up SSH key and known hosts
-          run: >
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
-  
-            chmod 600 ~/ssh_key
-  
-            mkdir -p ~/.ssh
-  
-            ssh-keyscan -H 13.60.253.180 >> ~/.ssh/known_hosts
-  
-  
-            - name: SSH into server and deploy
-  
-            run: |
-              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.60.253.180 << 'EOF'
-                cd Devops-MonoRepo-Test/
-                git fetch --all
-                git reset --hard origin/main  # Ensures server matches GitHub repo
-                git pull origin main
-                export PATH=/home/ubuntu/.nvm/versions/node/v22.13.1/bin:$PATH
-                npm install -g pnpm
-                pnpm install
-                pnpm run build
-                pm2 restart all --update-env
-              EOF
-  
+name: Deploy to staging
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  redeploy_everything:
+    runs-on: ubuntu-latest
+    name: Deploying everything to staging
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 13.60.253.180 >> ~/.ssh/known_hosts
+
+      - name: SSH into server and deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@13.60.253.180 << 'EOF'
+            set -e  # Exit script on error
+            cd ~/Devops-MonoRepo-Test
+            git fetch --all
+            git reset --hard origin/main  # Ensures your local repo matches GitHub
+            git pull origin main
+            export PATH=/home/ubuntu/.nvm/versions/node/v22.13.1/bin:$PATH
+            npm install -g pnpm
+            pnpm install
+            pnpm run build
+            pm2 restart all --update-env
+          EOF
